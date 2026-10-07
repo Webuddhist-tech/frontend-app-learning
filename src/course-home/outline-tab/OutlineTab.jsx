@@ -10,6 +10,7 @@ import { AlertList } from '../../generic/user-messages';
 
 import CourseDates from './widgets/CourseDates';
 import CourseHandouts from './widgets/CourseHandouts';
+import DonationCard from './widgets/DonationCard';
 import StartOrResumeCourseCard from './widgets/StartOrResumeCourseCard';
 import WeeklyLearningGoalCard from './widgets/WeeklyLearningGoalCard';
 import CourseTools from './widgets/CourseTools';
@@ -215,6 +216,7 @@ const OutlineTab = () => {
             <CourseOutlineTabNotificationsSlot courseId={courseId} />
             <CourseDates />
             <CourseHandouts />
+            <DonationCard />
           </div>
         )}
       </div>

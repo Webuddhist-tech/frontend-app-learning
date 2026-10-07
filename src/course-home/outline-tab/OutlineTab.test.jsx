@@ -55,6 +55,8 @@ describe('Outline Tab', () => {
   const masqueradeUrl = `${getConfig().LMS_BASE_URL}/courses/${courseId}/masquerade`;
   const outlineUrl = `${getConfig().LMS_BASE_URL}/api/course_home/outline/${courseId}`;
   const proctoringInfoUrl = `${getConfig().EXAMS_BASE_URL}/api/v1/student/course_id/${encodeURIComponent(courseId)}/onboarding?username=MockUser`;
+  const donationUrl = `${getConfig().LMS_BASE_URL}/api/courses/${courseId}/donation/`;
+  const donationClickUrl = `${getConfig().LMS_BASE_URL}/api/courses/${courseId}/donation/click/`;
 
   const store = initializeStore();
   const defaultMetadata = Factory.build('courseHomeMetadata');
@@ -94,6 +96,8 @@ describe('Outline Tab', () => {
       onboarding_link: 'test',
       expiration_date: null,
     });
+    axiosMock.onGet(donationUrl).reply(200, { enabled: false });
+    axiosMock.onPost(donationClickUrl).reply(201, {});
 
     // Mock courseware search params
     mockSearchParams();
@@ -557,6 +561,101 @@ describe('Outline Tab', () => {
       setTabData({ handouts_html: null });
       await fetchAndRender();
       expect(screen.queryByRole('heading', { name: 'Course Handouts' })).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Donation Card', () => {
+    const donation = {
+      enabled: true,
+      heading: 'Support our monastery',
+      message_html: '<p>Your gift keeps these teachings <b>free</b>. <a href="https://example.org/about">About us</a></p>',
+      button_label: 'Donate now',
+      url: 'https://example.org/donate',
+      partner_name: 'Sera Jey Monastery',
+    };
+
+    beforeEach(() => {
+      setMetadata({ is_enrolled: true });
+      axiosMock.onGet(donationUrl).reply(200, donation);
+    });
+
+    it('shows the school\'s card to enrolled learners', async () => {
+      await fetchAndRender();
+
+      const heading = await screen.findByRole('heading', { name: 'Support our monastery' });
+      expect(heading.closest('section').querySelector('img')).toBeNull();
+      expect(screen.getByText('free')).toBeInTheDocument();
+      const button = screen.getByRole('link', { name: /Donate now/ });
+      expect(button).toHaveAttribute('href', 'https://example.org/donate');
+      expect(button).toHaveAttribute('target', '_blank');
+      expect(button).toHaveAttribute('rel', 'noopener noreferrer');
+    });
+
+    it('opens links in the message in a new tab', async () => {
+      await fetchAndRender();
+
+      const link = await screen.findByRole('link', { name: 'About us' });
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    });
+
+    it('uses the default heading and button text when the school sets none', async () => {
+      axiosMock.onGet(donationUrl).reply(200, {
+        ...donation, heading: '', button_label: '', message_html: null,
+      });
+      await fetchAndRender();
+
+      expect(await screen.findByRole('heading', { name: 'Support Sera Jey Monastery' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /^Donate/ })).toBeInTheDocument();
+    });
+
+    it('hides the heading when the school turned it off', async () => {
+      axiosMock.onGet(donationUrl).reply(200, { ...donation, show_heading: false });
+      await fetchAndRender();
+
+      expect(await screen.findByRole('link', { name: /Donate now/ })).toBeInTheDocument();
+      expect(screen.queryByRole('heading', { name: 'Support our monastery' })).not.toBeInTheDocument();
+      expect(screen.getByRole('region', { name: 'Support our monastery' })).toBeInTheDocument();
+    });
+
+    it('records a click on the button', async () => {
+      await fetchAndRender();
+
+      await userEvent.click(await screen.findByRole('link', { name: /Donate now/ }));
+
+      await waitFor(() => expect(axiosMock.history.post.map(request => request.url)).toContain(donationClickUrl));
+    });
+
+    it('shows nothing when the school has no card for this course', async () => {
+      axiosMock.onGet(donationUrl).reply(200, { enabled: false });
+      await fetchAndRender();
+
+      await waitFor(() => expect(axiosMock.history.get.map(request => request.url)).toContain(donationUrl));
+      expect(screen.queryByRole('heading', { name: 'Support our monastery' })).not.toBeInTheDocument();
+    });
+
+    it('shows nothing when the request fails', async () => {
+      axiosMock.onGet(donationUrl).reply(500);
+      await fetchAndRender();
+
+      await waitFor(() => expect(axiosMock.history.get.map(request => request.url)).toContain(donationUrl));
+      expect(screen.queryByRole('heading', { name: 'Support our monastery' })).not.toBeInTheDocument();
+    });
+
+    it('does not ask for a card when the learner is not enrolled', async () => {
+      setMetadata({ is_enrolled: false });
+      await fetchAndRender();
+
+      expect(axiosMock.history.get.map(request => request.url)).not.toContain(donationUrl);
+      expect(screen.queryByRole('heading', { name: 'Support our monastery' })).not.toBeInTheDocument();
+    });
+
+    it('does not ask for a card when the course has ended', async () => {
+      setTabData({ has_ended: true });
+      await fetchAndRender();
+
+      expect(axiosMock.history.get.map(request => request.url)).not.toContain(donationUrl);
+      expect(screen.queryByRole('heading', { name: 'Support our monastery' })).not.toBeInTheDocument();
     });
   });
 

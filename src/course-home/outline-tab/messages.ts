@@ -46,6 +46,21 @@ const messages = defineMessages({
     defaultMessage: 'Subsections are not navigable between each other, they can only be accessed through their link.',
     description: 'Label for hidden sequence in course outline',
   },
+  donationButton: {
+    id: 'learning.outline.donation.button',
+    defaultMessage: 'Donate',
+    description: 'Default text of the button that opens a school\'s own donation page, used when the school sets no button text',
+  },
+  donationHeading: {
+    id: 'learning.outline.donation.heading',
+    defaultMessage: 'Support {partnerName}',
+    description: 'Default heading of the donation card on the course home page, used when the school sets no heading',
+  },
+  donationOpensNewTab: {
+    id: 'learning.outline.donation.opensNewTab',
+    defaultMessage: '(opens in a new tab)',
+    description: 'Screen reader text after the donation button, telling that the donation page opens in a new tab',
+  },
   dates: {
     id: 'learning.outline.dates',
     defaultMessage: 'Important dates',

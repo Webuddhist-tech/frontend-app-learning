@@ -344,6 +344,17 @@ export async function postDismissWelcomeMessage(courseId) {
   await getAuthenticatedHttpClient().post(url.href, { course_id: courseId });
 }
 
+export async function getDonationData(courseId) {
+  const url = new URL(`${getConfig().LMS_BASE_URL}/api/courses/${courseId}/donation/`);
+  const { data } = await getAuthenticatedHttpClient().get(url.href);
+  return camelCaseObject(data);
+}
+
+export async function postDonationClick(courseId) {
+  const url = new URL(`${getConfig().LMS_BASE_URL}/api/courses/${courseId}/donation/click/`);
+  await getAuthenticatedHttpClient().post(url.href);
+}
+
 export async function postRequestCert(courseId) {
   const url = new URL(`${getConfig().LMS_BASE_URL}/courses/${courseId}/generate_user_cert`);
   await getAuthenticatedHttpClient().post(url.href);
