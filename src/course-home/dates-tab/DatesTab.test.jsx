@@ -5,6 +5,7 @@ import { Factory } from 'rosie';
 import { getConfig, history } from '@edx/frontend-platform';
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { logError } from '@edx/frontend-platform/logging';
 import { AppProvider } from '@edx/frontend-platform/react';
 import { waitForElementToBeRemoved } from '@testing-library/dom';
 import { render, screen, within } from '@testing-library/react';
@@ -17,6 +18,12 @@ import initializeStore from '../../store';
 import { TabContainer } from '../../tab-page';
 import { appendBrowserTimezoneToUrl } from '../../utils';
 import { UserMessagesProvider } from '../../generic/user-messages';
+import { getSectionScheduleUrl } from './section-schedule/api';
+
+jest.mock('@edx/frontend-platform/logging', () => ({
+  ...jest.requireActual('@edx/frontend-platform/logging'),
+  logError: jest.fn(),
+}));
 
 initializeMockApp();
 jest.mock('@edx/frontend-platform/analytics');
@@ -81,6 +88,131 @@ describe('DatesTab', () => {
     }
     throw new Error('Did not find day container');
   }
+
+  describe('when the course has a section schedule', () => {
+    const session = (overrides) => ({
+      section_id: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@s1',
+      title: 'Lesson 1 Basics',
+      start_date: '2030-08-17',
+      end_date: '2030-08-17',
+      num_days: 1,
+      start_time: '19:00',
+      end_time: '20:30',
+      timezone_abbr: 'IST',
+      instructor: 'Geshe Tenzin',
+      tools_required: 'Workbook',
+      notes: 'Bring a cushion',
+      content_available_from: null,
+      ...overrides,
+    });
+
+    function renderWithSchedule(schedule) {
+      axiosMock.onGet(courseMetadataUrl).reply(200, courseMetadata);
+      axiosMock.onGet(datesUrl).reply(200, datesTabData);
+      axiosMock.onGet(getSectionScheduleUrl(courseId)).reply(200, schedule);
+      history.push(`/course/${courseId}/dates`);
+      render(component);
+    }
+
+    it('shows a session alongside the other dates of its day', async () => {
+      renderWithSchedule({ enabled: true, timezone: 'Asia/Kolkata', sessions: [session()] });
+      const sessionNode = await screen.findByTestId('dates-section-schedule');
+      const { day, items } = await getDay('Sat, Aug 17, 2030');
+      expect(items).toHaveLength(3); // the existing date blocks are untouched
+      expect(within(day).getByTestId('dates-section-schedule')).toBe(sessionNode);
+      expect(sessionNode).toHaveTextContent('Lesson 1 Basics');
+      expect(sessionNode).toHaveTextContent('7:00 PM–8:30 PM IST');
+      expect(sessionNode).toHaveTextContent('Instructor: Geshe Tenzin');
+      expect(sessionNode).toHaveTextContent('Tools required: Workbook');
+      expect(sessionNode).toHaveTextContent('Bring a cushion');
+      expect(sessionNode).not.toHaveTextContent('Content available from');
+    });
+
+    it('gives a session on its own day a new day, with its date range and release note', async () => {
+      renderWithSchedule({
+        enabled: true,
+        timezone: 'Asia/Kolkata',
+        sessions: [session({
+          title: 'Retreat',
+          start_date: '2031-01-05',
+          end_date: '2031-01-06',
+          num_days: 2,
+          start_time: null,
+          end_time: null,
+          instructor: '',
+          tools_required: '',
+          notes: '',
+          content_available_from: '2031-01-10',
+        })],
+      });
+      const { day } = await getDay('Sun, Jan 5, 2031');
+      const sessionNode = within(day).getByTestId('dates-section-schedule');
+      expect(sessionNode).toHaveTextContent('Retreat');
+      expect(sessionNode).toHaveTextContent('Jan 5 – Jan 6, 2031');
+      expect(sessionNode).toHaveTextContent('Content available from Jan 10, 2031');
+      expect(sessionNode).not.toHaveTextContent('Instructor');
+    });
+
+    it('shows no sessions when the schedule is disabled', async () => {
+      renderWithSchedule({ enabled: false, timezone: 'Asia/Kolkata', sessions: [] });
+      await getDay('Sat, Aug 17, 2030');
+      expect(screen.queryByTestId('dates-section-schedule')).toBeNull();
+    });
+
+    it('shows two sections with the same name and time', async () => {
+      const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+      renderWithSchedule({
+        enabled: true,
+        timezone: 'Asia/Kolkata',
+        sessions: [
+          session({ section_id: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@a', title: 'Introduction' }),
+          session({ section_id: 'block-v1:edX+DemoX+Demo_Course+type@chapter+block@b', title: 'Introduction' }),
+        ],
+      });
+      expect(await screen.findAllByTestId('dates-section-schedule')).toHaveLength(2);
+      expect(consoleError.mock.calls.some(([message]) => `${message}`.includes('same key'))).toBe(false);
+      consoleError.mockRestore();
+    });
+
+    it("doesn't count sessions in a day's own badges", async () => {
+      // Aug 18 holds one verified-only date: its header badge must survive a session on that day.
+      renderWithSchedule({
+        enabled: true,
+        timezone: 'Asia/Kolkata',
+        sessions: [session({ start_date: '2030-08-18', end_date: '2030-08-18' })],
+      });
+      await screen.findByTestId('dates-section-schedule');
+      const { day, header } = await getDay('Sun, Aug 18, 2030');
+      expect(within(header).getByTestId('dates-badge')).toHaveTextContent('Verified only');
+      expect(within(day).getAllByTestId('dates-badge')).toHaveLength(1);
+    });
+
+    it.each([404, 403])('quietly shows the other dates when the schedule is not available (%s)', async (status) => {
+      logError.mockClear();
+      axiosMock.onGet(courseMetadataUrl).reply(200, courseMetadata);
+      axiosMock.onGet(datesUrl).reply(200, datesTabData);
+      axiosMock.onGet(getSectionScheduleUrl(courseId)).reply(status);
+      history.push(`/course/${courseId}/dates`);
+      render(component);
+
+      await getDay('Sat, Aug 17, 2030');
+      expect(screen.queryByTestId('dates-section-schedule')).toBeNull();
+      expect(logError).not.toHaveBeenCalled();
+    });
+
+    it('logs a server error but still shows the other dates', async () => {
+      logError.mockClear();
+      axiosMock.onGet(courseMetadataUrl).reply(200, courseMetadata);
+      axiosMock.onGet(datesUrl).reply(200, datesTabData);
+      axiosMock.onGet(getSectionScheduleUrl(courseId)).reply(500);
+      history.push(`/course/${courseId}/dates`);
+      render(component);
+
+      await getDay('Sat, Aug 17, 2030');
+      await waitFor(() => expect(logError).toHaveBeenCalled());
+      expect(screen.queryByTestId('dates-section-schedule')).toBeNull();
+    });
+  });
 
   describe('when receiving a full set of dates data', () => {
     beforeEach(() => {

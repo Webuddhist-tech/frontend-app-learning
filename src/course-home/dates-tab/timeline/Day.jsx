@@ -15,6 +15,7 @@ import { useModel } from '../../../generic/model-store';
 
 import { getBadgeListAndColor } from './badgelist';
 import { isLearnerAssignment } from '../utils';
+import { isSectionSchedule, SectionScheduleItem } from '../section-schedule';
 
 const Day = ({
   date,
@@ -32,7 +33,11 @@ const Day = ({
 
   const timezoneFormatArgs = userTimezone ? { timeZone: userTimezone } : {};
 
-  const { color, badges } = getBadgeListAndColor(date, intl, null, items);
+  // Scheduled sessions are informational: they must not count towards the day's
+  // badges (e.g. they would stop a day of only locked assignments saying so).
+  const dateItems = items.filter((item) => !isSectionSchedule(item));
+
+  const { color, badges } = getBadgeListAndColor(date, intl, null, dateItems);
 
   return (
     <li className="dates-day pb-4" data-testid="dates-day">
@@ -59,7 +64,10 @@ const Day = ({
           {badges}
         </div>
         {items.map((item) => {
-          const { badges: itemBadges } = getBadgeListAndColor(date, intl, item, items);
+          if (isSectionSchedule(item)) {
+            return <SectionScheduleItem key={item.session.sectionId} item={item} />;
+          }
+          const { badges: itemBadges } = getBadgeListAndColor(date, intl, item, dateItems);
 
           const showDueDateTime = item.dateType === 'assignment-due-date';
           const showLink = item.link && isLearnerAssignment(item);

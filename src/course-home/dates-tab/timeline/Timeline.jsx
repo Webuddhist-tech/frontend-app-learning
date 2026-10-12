@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useModel } from '../../../generic/model-store';
 
 import Day from './Day';
 import { daycmp, isLearnerAssignment } from '../utils';
+import { mergeDateBlocks, useSectionSchedule } from '../section-schedule';
 
 const Timeline = () => {
   const {
@@ -12,8 +13,14 @@ const Timeline = () => {
   } = useSelector(state => state.courseHome);
 
   const {
-    courseDateBlocks,
+    courseDateBlocks: apiDateBlocks,
   } = useModel('dates', courseId);
+  const { userTimezone } = useModel('courseHomeMeta', courseId);
+  const sessions = useSectionSchedule(courseId);
+  const courseDateBlocks = useMemo(
+    () => mergeDateBlocks(apiDateBlocks, sessions, userTimezone),
+    [apiDateBlocks, sessions, userTimezone],
+  );
 
   // Group date items by day (assuming they are sorted in first place) and add some metadata
   const groupedDates = [];
