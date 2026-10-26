@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Button, Icon } from '@openedx/paragon';
-import { ChevronRight as ChevronRightIcon } from '@openedx/paragon/icons';
+import { ChevronRight as ChevronRightIcon } from '@src/generic/WbaIcons';
 
 import courseOutlineMessages from '@src/course-home/outline-tab/messages';
 import CompletionIcon from './CompletionIcon';

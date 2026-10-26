@@ -6,7 +6,7 @@ import {
   ArrowForward,
   ChevronLeft,
   ChevronRight,
-} from '@openedx/paragon/icons';
+} from '@src/generic/WbaIcons';
 import { isRtl, getLocale } from '@edx/frontend-platform/i18n';
 
 import UnitNavigationEffortEstimate from '../UnitNavigationEffortEstimate';

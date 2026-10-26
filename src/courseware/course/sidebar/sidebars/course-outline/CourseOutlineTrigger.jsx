@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { IconButton, OverlayTrigger, Tooltip } from '@openedx/paragon';
-import { MenuOpen as MenuOpenIcon } from '@openedx/paragon/icons';
+import { OutlineOpen as OutlineOpenIcon } from '@src/generic/WbaIcons';
 
 import { useCourseOutlineSidebar } from './hooks';
 import { ID } from './constants';
@@ -41,7 +41,7 @@ const CourseOutlineTrigger = ({ isMobileView }) => {
         <IconButton
           alt={intl.formatMessage(messages.toggleCourseOutlineTrigger)}
           className="outline-sidebar-toggle-btn flex-shrink-0"
-          iconAs={MenuOpenIcon}
+          iconAs={OutlineOpenIcon}
           onClick={handleToggleCollapse}
           style={{
             backgroundColor: '#FFFFFF',

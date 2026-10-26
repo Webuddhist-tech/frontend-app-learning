@@ -6,7 +6,7 @@ import {
   Stack,
   Tooltip,
 } from '@openedx/paragon';
-import { InfoOutline } from '@openedx/paragon/icons';
+import { Info } from '@src/generic/WbaIcons';
 import { useContextId } from '../../../../data/hooks';
 
 import { useModel } from '../../../../generic/model-store';
@@ -55,7 +55,7 @@ const GradeSummaryTableFooter = () => {
               )}
             >
               <Icon
-                src={InfoOutline}
+                src={Info}
                 size="sm"
                 alt={intl.formatMessage(messages.gradeSummaryTooltipAlt)}
               />

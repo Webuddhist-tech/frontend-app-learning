@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Locked } from '@openedx/paragon/icons';
+import { Lock } from '@src/generic/WbaIcons';
 import { Icon } from '@openedx/paragon';
 import { useContextId } from '../../../../data/hooks';
 import { useModel } from '../../../../generic/model-store';
@@ -16,7 +16,7 @@ const AssignmentTypeCell = ({
     gradesFeatureIsFullyLocked,
   } = useModel('progress', courseId);
 
-  const lockedIcon = locked ? <Icon id={`assignmentTypeBlockedIcon${assignmentType}`} aria-label={intl.formatMessage(messages.noAccessToAssignmentType, { assignmentType })} className="mr-1 mt-1 d-inline-flex" style={{ height: '1rem', width: '1rem' }} src={Locked} data-testid="locked-icon" /> : '';
+  const lockedIcon = locked ? <Icon id={`assignmentTypeBlockedIcon${assignmentType}`} aria-label={intl.formatMessage(messages.noAccessToAssignmentType, { assignmentType })} className="mr-1 mt-1 d-inline-flex" style={{ height: '1rem', width: '1rem' }} src={Lock} data-testid="locked-icon" /> : '';
 
   return (
     <div className="d-flex small">

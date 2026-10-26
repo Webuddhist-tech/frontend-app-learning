@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { CheckCircle, WarningFilled } from '@openedx/paragon/icons';
+import { CheckCircle, Warning } from '@src/generic/WbaIcons';
 import { breakpoints, Icon, useWindowSize } from '@openedx/paragon';
 import { useContextId } from '../../../../data/hooks';
 import { useModel } from '../../../../generic/model-store';
@@ -81,7 +81,7 @@ const CourseGradeFooter = ({ passingGrade }) => {
   const passingIcon = isPassing ? (
     <Icon src={CheckCircle} className="text-success-300 d-inline-flex align-bottom" />
   ) : (
-    <Icon src={WarningFilled} className="d-inline-flex align-bottom" />
+    <Icon src={Warning} className="d-inline-flex align-bottom" />
   );
 
   return (
@@ -103,7 +103,7 @@ const CourseGradeFooter = ({ passingGrade }) => {
       {latestDueDate && (
         <NoticeRow
           wideScreen={wideScreen}
-          icon={<Icon src={WarningFilled} className="d-inline-flex align-bottom" />}
+          icon={<Icon src={Warning} className="d-inline-flex align-bottom" />}
           bgClass="bg-warning-100"
           message={intl.formatMessage(messages.courseGradeFooterDueDateNotice, {
             dueDate: intl.formatDate(latestDueDate, {

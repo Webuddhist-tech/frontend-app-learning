@@ -2,9 +2,10 @@ import { useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Collapsible } from '@openedx/paragon';
+import { Collapsible, Icon } from '@openedx/paragon';
 
 import courseOutlineMessages from '@src/course-home/outline-tab/messages';
+import { ChevronDown, ChevronUp } from '@src/generic/WbaIcons';
 import { useCourseOutlineSidebar } from '../hooks';
 import CompletionIcon from './CompletionIcon';
 import SidebarUnit from './SidebarUnit';
@@ -90,6 +91,8 @@ const SidebarSequence = ({
         title={sectionTitle}
         open={open}
         onToggle={() => setOpen(!open)}
+        iconWhenClosed={<Icon src={ChevronDown} />}
+        iconWhenOpen={<Icon src={ChevronUp} />}
       >
         <ol className="list-unstyled mb-0">
           {unitIds.map((unitId, index) => (

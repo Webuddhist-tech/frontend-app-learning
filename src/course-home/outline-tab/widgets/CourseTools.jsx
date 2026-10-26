@@ -13,7 +13,14 @@ import { faNewspaper } from '@fortawesome/free-regular-svg-icons';
 import messages from '../messages';
 import { useModel } from '../../../generic/model-store';
 import LaunchCourseHomeTourButton from '../../../product-tours/newUserCourseHomeTour/LaunchCourseHomeTourButton';
+import { Bookmark, Updates } from '../../../generic/WbaIcons';
 import '../SidebarCards.scss';
+
+// Tools drawn with the WBA design's outline icons; the rest keep Font Awesome.
+const designIcons = {
+  'edx.bookmarks': Bookmark,
+  'edx.updates': Updates,
+};
 
 const CourseTools = () => {
   const intl = useIntl();
@@ -67,14 +74,19 @@ const CourseTools = () => {
     <section className="mb-4 course-sidebar-card">
       <h2 className="h4">{intl.formatMessage(messages.tools)}</h2>
       <ul className="list-unstyled">
-        {courseTools.map((courseTool) => (
-          <li key={courseTool.analyticsId} className="small">
-            <a href={courseTool.url} onClick={() => logClick(courseTool.analyticsId)}>
-              <FontAwesomeIcon icon={renderIcon(courseTool.analyticsId)} className="mr-2" fixedWidth />
-              {courseTool.title}
-            </a>
-          </li>
-        ))}
+        {courseTools.map((courseTool) => {
+          const DesignIcon = designIcons[courseTool.analyticsId];
+          return (
+            <li key={courseTool.analyticsId} className="small">
+              <a href={courseTool.url} onClick={() => logClick(courseTool.analyticsId)}>
+                {DesignIcon
+                  ? <DesignIcon className="course-tool-icon" width={17} height={17} />
+                  : <FontAwesomeIcon icon={renderIcon(courseTool.analyticsId)} className="mr-2" fixedWidth />}
+                {courseTool.title}
+              </a>
+            </li>
+          );
+        })}
         <li className="small" id="courseHome-launchTourLink">
           <LaunchCourseHomeTourButton />
         </li>

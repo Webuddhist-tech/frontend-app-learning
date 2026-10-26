@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -8,6 +8,17 @@ import messages from '../messages';
 import { useModel } from '../../../generic/model-store';
 import '../SidebarCards.scss';
 
+// Studio saves cleared handouts as bare markup (usually "<ol></ol>"), so an
+// empty string check alone still renders an empty card.
+const hasHandoutsContent = (html) => {
+  if (!html) {
+    return false;
+  }
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent.trim() !== ''
+    || !!doc.body.querySelector('img, video, audio, iframe, object, embed');
+};
+
 const CourseHandouts = () => {
   const intl = useIntl();
   const {
@@ -16,8 +27,9 @@ const CourseHandouts = () => {
   const {
     handoutsHtml,
   } = useModel('outline', courseId);
+  const hasContent = useMemo(() => hasHandoutsContent(handoutsHtml), [handoutsHtml]);
 
-  if (!handoutsHtml) {
+  if (!hasContent) {
     return null;
   }
 

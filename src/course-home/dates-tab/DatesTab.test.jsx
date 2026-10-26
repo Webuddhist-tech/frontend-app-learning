@@ -74,6 +74,12 @@ describe('DatesTab', () => {
   // better than adding non-style class names.
   // Hence the following getDay query helper.
   async function getDay(date) {
+    // Days before today start folded away; open them so every day can be found.
+    await screen.findAllByTestId('dates-day');
+    const showEarlier = screen.queryByRole('button', { name: /^Show \d+ earlier dates?$/ });
+    if (showEarlier) {
+      fireEvent.click(showEarlier);
+    }
     const dateNode = await screen.findByText(date);
     let parent = dateNode.parentElement;
     while (parent) {
@@ -281,6 +287,44 @@ describe('DatesTab', () => {
       await waitFor(() => {
         expect(screen.queryByText(tipText)).toBeNull(); // and it's gone again
       });
+    });
+
+    it('folds the earlier days, up to the first one with past-due work', async () => {
+      await screen.findByText('Sat, Aug 17, 2030');
+      expect(screen.queryByText('Fri, May 1, 2020')).toBeNull();
+      expect(screen.queryByText('Sun, May 3, 2020')).toBeNull();
+      const showEarlier = screen.getByRole('button', { name: 'Show 2 earlier dates' });
+      expect(showEarlier).toHaveAttribute('aria-expanded', 'false');
+      const firstDay = screen.getAllByTestId('dates-day')[0];
+      expect(firstDay).toHaveTextContent('Mon, May 4, 2020');
+      expect(firstDay).toHaveTextContent('Past due');
+    });
+
+    it('shows and hides the earlier days', async () => {
+      const showEarlier = await screen.findByRole('button', { name: /^Show \d+ earlier dates?$/ });
+      fireEvent.click(showEarlier);
+      expect(await screen.findByText('Sun, May 3, 2020')).toBeInTheDocument();
+
+      const hideEarlier = screen.getByRole('button', { name: 'Hide earlier dates' });
+      expect(hideEarlier).toHaveAttribute('aria-expanded', 'true');
+      fireEvent.click(hideEarlier);
+      expect(screen.queryByText('Sun, May 3, 2020')).toBeNull();
+    });
+  });
+
+  describe('when every date is in the past', () => {
+    it('shows all the days, with nothing folded', async () => {
+      const pastDates = {
+        ...datesTabData,
+        course_date_blocks: datesTabData.course_date_blocks.filter(({ date }) => date < '2021'),
+      };
+      axiosMock.onGet(courseMetadataUrl).reply(200, courseMetadata);
+      axiosMock.onGet(datesUrl).reply(200, pastDates);
+      history.push(`/course/${courseId}/dates`);
+      render(component);
+
+      expect(await screen.findByText('Sun, May 3, 2020')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /earlier dates?$/ })).toBeNull();
     });
   });
 

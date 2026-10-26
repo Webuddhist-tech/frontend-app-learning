@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { InfoOutline } from '@openedx/paragon/icons';
+import { Info } from '@src/generic/WbaIcons';
 import {
   Icon, IconButton, OverlayTrigger, Popover,
 } from '@openedx/paragon';
@@ -64,7 +64,7 @@ const GradeRangeTooltip = ({ iconButtonClassName, passingGrade }) => {
         onBlur={() => setShowTooltip(false)}
         alt={intl.formatMessage(messages.gradeRangeTooltipAlt)}
         className={`mb-0 mt-n1 ${iconButtonClassName}`}
-        src={InfoOutline}
+        src={Info}
         iconAs={Icon}
         size="inline"
         disabled={gradesFeatureIsFullyLocked}
