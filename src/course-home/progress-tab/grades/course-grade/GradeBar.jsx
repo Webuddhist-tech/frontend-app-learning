@@ -31,9 +31,10 @@ const GradeBar = ({ passingGrade }) => {
       <div className="sr-only">{intl.formatMessage(messages.courseGradeBarAltText, { currentGrade, passingGrade })}</div>
       <svg width="100%" height="100px" className="grade-bar" aria-hidden="true">
         <g style={{ transform: 'translateY(2.61em)' }}>
-          <rect className="grade-bar__base" width="100%" />
-          <rect className="grade-bar--passing" width={`${passingGrade}%`} style={adjustedRtlStyle(passingGrade)} />
-          <rect className={`grade-bar--current-${isPassing ? 'passing' : 'non-passing'}`} width={`${currentGrade}%`} style={adjustedRtlStyle(currentGrade)} />
+          {/* rx as an attribute, not CSS: Safari before 17.4 ignores the CSS property */}
+          <rect className="grade-bar__base" width="100%" rx="4.5" />
+          <rect className="grade-bar--passing" width={`${passingGrade}%`} style={adjustedRtlStyle(passingGrade)} rx="4.5" />
+          <rect className={`grade-bar--current-${isPassing ? 'passing' : 'non-passing'}`} width={`${currentGrade}%`} style={adjustedRtlStyle(currentGrade)} rx="4.5" />
 
           {/* Start divider */}
           <rect className="grade-bar__divider" />

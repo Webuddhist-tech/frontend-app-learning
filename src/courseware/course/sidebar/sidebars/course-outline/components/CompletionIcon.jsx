@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
-import {
-  CheckCircle as CheckCircleIcon,
-  LmsCompletionSolid as LmsCompletionSolidIcon,
-} from '@openedx/paragon/icons';
+import { CheckCircle as CheckCircleIcon, Ring as RingIcon } from '@src/generic/WbaIcons';
 
 import { DashedCircleIcon } from '../icons';
 
@@ -12,7 +9,7 @@ const CompletionIcon = ({ completionStat: { completed = 0, total = 0 }, enabled 
 
   switch (true) {
     case !completed || !enabled:
-      return <LmsCompletionSolidIcon className="text-gray-300" data-testid="completion-solid-icon" />;
+      return <RingIcon className="text-gray-300" data-testid="completion-solid-icon" />;
     case completed === total:
       return <CheckCircleIcon className="text-success" data-testid="check-circle-icon" />;
     default:

@@ -16,6 +16,16 @@ const messages = defineMessages({
     defaultMessage: 'Past due',
     description: 'Shown as label for the assignments which deadline has passed',
   },
+  showEarlierDates: {
+    id: 'learning.dates.showEarlierDates',
+    defaultMessage: '{count, plural, one {Show # earlier date} other {Show # earlier dates}}',
+    description: 'Button above the dates timeline that reveals the dates before today, which start hidden.',
+  },
+  hideEarlierDates: {
+    id: 'learning.dates.hideEarlierDates',
+    defaultMessage: 'Hide earlier dates',
+    description: 'Button above the dates timeline that hides the dates before today again.',
+  },
   title: {
     id: 'learning.dates.title',
     defaultMessage: 'Important dates',

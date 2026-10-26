@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Card } from '@openedx/paragon';
-import { Forum } from '@openedx/paragon/icons';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { ensureConfig, getConfig } from '@edx/frontend-platform';
 
 import { useSelector } from 'react-redux';
 import { sendTrackingLogEvent } from '@edx/frontend-platform/analytics';
 import messages from '../messages';
+import { Chat } from '../../../generic/WbaIcons';
 import { useModel } from '../../../generic/model-store';
 
 ensureConfig(['DISCUSSIONS_MFE_BASE_URL']);
@@ -64,10 +64,10 @@ const StartOrResumeCourseCard = () => {
             <Button
               variant="outline-brand"
               href={discussionsUrl}
-              iconBefore={Forum}
               className="order-2 order-lg-1 mr-lg-2"
             >
-              {intl.formatMessage({ id: 'start.discussion', defaultMessage: 'Start Discussion' })}
+              <Chat className="course-tool-icon" width={17} height={17} />
+              {intl.formatMessage({ id: 'start.discussion', defaultMessage: 'Start discussion' })}
             </Button>
           </div>
         )}

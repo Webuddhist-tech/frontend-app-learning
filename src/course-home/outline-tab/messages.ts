@@ -188,6 +188,11 @@ const messages = defineMessages({
     id: 'learning.outline.welcomeMessage',
     defaultMessage: 'Welcome Message',
   },
+  welcomeMessageLabel: {
+    id: 'learning.outline.welcomeMessageLabel',
+    defaultMessage: 'Updates',
+    description: 'Label above the latest course update shown on the course home',
+  },
   welcomeMessageShowMoreButton: {
     id: 'learning.outline.welcomeMessageShowMoreButton',
     defaultMessage: 'Show More',

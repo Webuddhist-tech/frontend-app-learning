@@ -3,9 +3,9 @@ import classNames from 'classnames';
 import { Button, useToggle, IconButton } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  MenuOpen as MenuOpenIcon,
+  OutlineClose as OutlineCloseIcon,
   ChevronLeft as ChevronLeftIcon,
-} from '@openedx/paragon/icons';
+} from '@src/generic/WbaIcons';
 
 import { LOADING } from '@src/constants';
 import PageLoading from '@src/generic/PageLoading';
@@ -101,7 +101,7 @@ const CourseOutlineTray = () => {
       <IconButton
         alt={intl.formatMessage(messages.toggleCourseOutlineTrigger)}
         className="outline-sidebar-toggle-btn flex-shrink-0 text-dark bg-light-200"
-        iconAs={MenuOpenIcon}
+        iconAs={OutlineCloseIcon}
         onClick={handleToggleCollapse}
       />
     </div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon, StatefulButton } from '@openedx/paragon';
 import { FormattedMessage } from '@edx/frontend-platform/i18n';
 import { useDispatch } from 'react-redux';
-import { Bookmark, BookmarkBorder } from '@openedx/paragon/icons';
+import { Bookmark, BookmarkFilled } from '@src/generic/WbaIcons';
 import { removeBookmark, addBookmark } from './data/thunks';
 
 const addBookmarkLabel = (
@@ -53,10 +53,10 @@ const BookmarkButton = ({
         bookmarkedProcessing: hasBookmarkLabel,
       }}
       icons={{
-        default: <Icon src={BookmarkBorder} className="text-primary" />,
-        defaultProcessing: <Icon src={BookmarkBorder} className="text-primary" />,
-        bookmarked: <Icon src={Bookmark} className="text-primary" />,
-        bookmarkedProcessing: <Icon src={Bookmark} className="text-primary" />,
+        default: <Icon src={Bookmark} className="text-primary" />,
+        defaultProcessing: <Icon src={Bookmark} className="text-primary" />,
+        bookmarked: <Icon src={BookmarkFilled} className="text-primary" />,
+        bookmarkedProcessing: <Icon src={BookmarkFilled} className="text-primary" />,
       }}
     />
   );

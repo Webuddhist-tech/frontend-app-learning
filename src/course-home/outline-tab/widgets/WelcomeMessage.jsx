@@ -72,6 +72,7 @@ const WelcomeMessage = ({ courseId, nextElementRef }) => {
         </Button>,
       ] : []}
     >
+      <h2 className="welcome-message-label">{intl.formatMessage(messages.welcomeMessageLabel)}</h2>
       <div ref={messageBodyRef} tabIndex="-1">
         <TransitionReplace className="mb-3" enterDuration={400} exitDuration={200}>
           {showShortMessage ? (

@@ -1,6 +1,6 @@
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Icon } from '@openedx/paragon';
-import { Notifications } from '@openedx/paragon/icons';
+import { Bell } from '@src/generic/WbaIcons';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -16,7 +16,7 @@ const NotificationIcon = ({
   return (
     <>
       <Icon
-        src={Notifications}
+        src={Bell}
         className="m-0 m-auto"
         style={{ color: isActive ? '#FFFFFF' : '#093055' }}
         alt={intl.formatMessage(messages.openNotificationTrigger)}
