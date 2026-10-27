@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { CheckCircle as CheckCircleIcon, Ring as RingIcon } from '@src/generic/WbaIcons';
+import { CheckCircleFilled as CheckCircleIcon, Ring as RingIcon } from '@src/generic/WbaIcons';
 
 import { DashedCircleIcon } from '../icons';
 

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { CheckCircleFilled } from '@src/generic/WbaIcons';
 import messages from '../messages';
 import UnitIcon, { UNIT_ICON_TYPES } from './UnitIcon';
 import UnitLinkWrapper from './UnitLinkWrapper';
@@ -71,7 +72,7 @@ const SidebarUnit = ({
         <div className="col-auto p-0">
           <UnitIcon type={iconType} isCompleted={completeAndEnabled} />
         </div>
-        <div className="col-10 p-0 ml-3 text-break">
+        <div className="col p-0 ml-3 text-break">
           <span className="align-middle">
             {renderTibetanText(title)}
           </span>
@@ -81,6 +82,11 @@ const SidebarUnit = ({
             </span>
           )}
         </div>
+        {completeAndEnabled && (
+          <div className="col-auto p-0 ml-2">
+            <CheckCircleFilled className="sidebar-unit-done" />
+          </div>
+        )}
       </UnitLinkWrapper>
     </li>
   );

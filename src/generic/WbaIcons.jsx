@@ -125,6 +125,13 @@ export const CheckCircle = makeIcon(
     <polyline points="8.2 12.2 11 15 16 9.5" />
   </>,
 );
+// Done in the course outline: a solid circle with a white tick.
+export const CheckCircleFilled = makeIcon(
+  <>
+    <circle cx="12" cy="12" r="10" fill="currentColor" stroke="none" />
+    <polyline points="7.8 12.3 10.8 15.2 16.3 9.3" stroke="#FFFFFF" strokeWidth={2.4} />
+  </>,
+);
 
 // Progress page: the grade notice (from the Course Progress design), info
 // buttons and locked grades.
