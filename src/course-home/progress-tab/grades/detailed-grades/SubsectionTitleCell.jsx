@@ -5,11 +5,11 @@ import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Collapsible, Icon, Row } from '@openedx/paragon';
 import {
-  ArrowDropDown,
-  ArrowDropUp,
+  ChevronDown,
+  ChevronUp,
   Info,
-  Locked,
-} from '@openedx/paragon/icons';
+  Lock,
+} from '@src/generic/WbaIcons';
 import { useContextId } from '../../../../data/hooks';
 
 import messages from '../messages';
@@ -51,8 +51,8 @@ const SubsectionTitleCell = ({ subsection }) => {
           aria-label={intl.formatMessage(messages.problemScoreToggleAltText, { subsectionTitle: displayName })}
           tabIndex={gradesFeatureIsFullyLocked ? '-1' : '0'}
         >
-          <Collapsible.Visible whenClosed><Icon src={ArrowDropDown} /></Collapsible.Visible>
-          <Collapsible.Visible whenOpen><Icon src={ArrowDropUp} /></Collapsible.Visible>
+          <Collapsible.Visible whenClosed><Icon src={ChevronDown} /></Collapsible.Visible>
+          <Collapsible.Visible whenOpen><Icon src={ChevronUp} /></Collapsible.Visible>
         </Collapsible.Trigger>
         <span className="small d-inline ml-4 pl-1">
           {gradesFeatureIsFullyLocked || subsection.learnerHasAccess ? ''
@@ -62,7 +62,7 @@ const SubsectionTitleCell = ({ subsection }) => {
                 aria-label={intl.formatMessage(messages.noAccessToSubsection, { displayName })}
                 className="mr-1 mt-1 d-inline-flex"
                 style={{ height: '1rem', width: '1rem' }}
-                src={Locked}
+                src={Lock}
                 data-testid="locked-icon"
               />
             )}

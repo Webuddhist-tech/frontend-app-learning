@@ -125,3 +125,27 @@ export const CheckCircle = makeIcon(
     <polyline points="8.2 12.2 11 15 16 9.5" />
   </>,
 );
+
+// Progress page: the grade notice (from the Course Progress design), info
+// buttons and locked grades.
+export const Warning = makeIcon(
+  <>
+    <path d="M12 3.6 1.8 20.4h20.4L12 3.6z" />
+    <line x1="12" y1="10" x2="12" y2="14.5" />
+    <line x1="12" y1="17.4" x2="12" y2="17.5" />
+  </>,
+  { strokeWidth: 1.9 },
+);
+export const Info = makeIcon(
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <line x1="12" y1="11" x2="12" y2="16.5" />
+    <line x1="12" y1="7.6" x2="12" y2="7.7" />
+  </>,
+);
+export const Lock = makeIcon(
+  <>
+    <rect x="5" y="10.5" width="14" height="10" rx="2" />
+    <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+  </>,
+);

@@ -7,7 +7,7 @@ import {
   Stack,
   Tooltip,
 } from '@openedx/paragon';
-import { InfoOutline, Locked } from '@openedx/paragon/icons';
+import { Info, Lock } from '@src/generic/WbaIcons';
 import { useContextId } from '../../../../data/hooks';
 
 import messages from '../messages';
@@ -36,14 +36,14 @@ const GradeSummaryHeader = ({ allOfSomeAssignmentTypeIsLocked }) => {
         >
           <Icon
             alt={intl.formatMessage(messages.gradeSummaryTooltipAlt)}
-            src={InfoOutline}
+            src={Info}
             size="sm"
           />
         </OverlayTrigger>
       </Stack>
       {!gradesFeatureIsFullyLocked && allOfSomeAssignmentTypeIsLocked && (
         <Stack direction="horizontal" className="small" gap={2}>
-          <Icon size="sm" src={Locked} data-testid="locked-icon" />
+          <Icon size="sm" src={Lock} data-testid="locked-icon" />
           <span>
             {intl.formatMessage(
               messages.gradeSummaryLimitedAccessExplanation,

@@ -1,7 +1,7 @@
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Locked } from '@openedx/paragon/icons';
+import { Lock } from '@src/generic/WbaIcons';
 import { Button, Icon } from '@openedx/paragon';
 import { useContextId } from '../../../../data/hooks';
 
@@ -52,7 +52,7 @@ const CourseGradeHeader = () => {
       <div className={`col-12 ${verifiedMode ? 'col-md-9' : ''} p-0`}>
         <div className="row w-100 m-0 p-0">
           <div className="col-1 p-0">
-            <Icon src={Locked} />
+            <Icon src={Lock} />
           </div>
           <div className="col-11 px-2 p-sm-0 h4 text-white">
             <span aria-hidden="true">
