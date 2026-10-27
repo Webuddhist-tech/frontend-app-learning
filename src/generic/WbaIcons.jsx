@@ -75,6 +75,15 @@ export const ChevronRight = makeIcon(<polyline points="9 6 15 12 9 18" />, { str
 export const ChevronDown = makeIcon(<polyline points="6 9 12 15 18 9" />, { strokeWidth: 2 });
 export const ChevronUp = makeIcon(<polyline points="6 15 12 9 18 15" />, { strokeWidth: 2 });
 
+// Close (X): the outline tray when it floats over the page on smaller screens.
+export const Close = makeIcon(
+  <>
+    <line x1="6" y1="6" x2="18" y2="18" />
+    <line x1="18" y1="6" x2="6" y2="18" />
+  </>,
+  { strokeWidth: 2 },
+);
+
 // Course outline tray: close it (lines, chevron pointing left) and reopen it.
 export const OutlineClose = makeIcon(
   <>

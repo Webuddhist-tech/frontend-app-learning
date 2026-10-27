@@ -5,6 +5,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   OutlineClose as OutlineCloseIcon,
   ChevronLeft as ChevronLeftIcon,
+  Close as CloseIcon,
 } from '@src/generic/WbaIcons';
 
 import { LOADING } from '@src/constants';
@@ -101,7 +102,7 @@ const CourseOutlineTray = () => {
       <IconButton
         alt={intl.formatMessage(messages.toggleCourseOutlineTrigger)}
         className="outline-sidebar-toggle-btn flex-shrink-0 text-dark bg-light-200"
-        iconAs={OutlineCloseIcon}
+        iconAs={shouldDisplayFullScreen ? CloseIcon : OutlineCloseIcon}
         onClick={handleToggleCollapse}
       />
     </div>
