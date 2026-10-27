@@ -1,15 +1,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {
-  Locked as LockedIcon,
-  Article as ArticleIcon,
-  LmsBook as LmsBookIcon,
-  LmsBookComplete as LmsBookCompleteIcon,
-  LmsEditSquare as LmsEditSquareIcon,
-  LmsEditSquareComplete as LmsEditSquareCompleteIcon,
-  LmsVideocam as LmsVideocamIcon,
-  LmsVideocamComplete as LmsVideocamCompleteIcon,
-} from '@openedx/paragon/icons';
+import { Locked as LockedIcon } from '@openedx/paragon/icons';
+import { Practice, Reading, Video } from '@src/generic/WbaIcons';
 
 export const UNIT_ICON_TYPES = {
   video: 'video',
@@ -20,28 +12,17 @@ export const UNIT_ICON_TYPES = {
 };
 
 const UnitIcon = ({ type, isCompleted, ...props }) => {
+  // The design's outline icons have no "complete" variant; completion shows
+  // through the text-success color instead. Lock has no design icon.
   const iconMap = {
-    [UNIT_ICON_TYPES.video]: {
-      default: LmsVideocamIcon,
-      complete: LmsVideocamCompleteIcon,
-    },
-    [UNIT_ICON_TYPES.problem]: {
-      default: LmsEditSquareIcon,
-      complete: LmsEditSquareCompleteIcon,
-    },
-    [UNIT_ICON_TYPES.vertical]: ArticleIcon,
+    [UNIT_ICON_TYPES.video]: Video,
+    [UNIT_ICON_TYPES.problem]: Practice,
+    [UNIT_ICON_TYPES.vertical]: Reading,
     [UNIT_ICON_TYPES.lock]: LockedIcon,
-    [UNIT_ICON_TYPES.other]: {
-      default: LmsBookIcon,
-      complete: LmsBookCompleteIcon,
-    },
+    [UNIT_ICON_TYPES.other]: Reading,
   };
 
-  let Icon = iconMap[type || UNIT_ICON_TYPES.other];
-
-  if (typeof Icon === 'object') {
-    Icon = iconMap[type || UNIT_ICON_TYPES.other]?.[isCompleted ? 'complete' : 'default'];
-  }
+  const Icon = iconMap[type || UNIT_ICON_TYPES.other];
 
   return (
     <Icon {...props} className={classNames({ 'text-success': isCompleted, 'text-gray-300': !isCompleted })} />

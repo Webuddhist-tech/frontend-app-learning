@@ -1,7 +1,7 @@
 import { ensureConfig, getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Icon } from '@openedx/paragon';
-import { Forum } from '@openedx/paragon/icons';
+import { Chat } from '@src/generic/WbaIcons';
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -50,7 +50,7 @@ const DiscussionsTrigger = ({
       ariaLabel={intl.formatMessage(messages.openDiscussionsTrigger)}
       isActive={isActive}
     >
-      <Icon src={Forum} className="m-0 m-auto" style={{ color: isActive ? '#FFFFFF' : '#093055' }} />
+      <Icon src={Chat} className="m-0 m-auto" style={{ color: isActive ? '#FFFFFF' : '#093055' }} />
     </SidebarTriggerBase>
   );
 };

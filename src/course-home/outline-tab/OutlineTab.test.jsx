@@ -558,6 +558,18 @@ describe('Outline Tab', () => {
       await fetchAndRender();
       expect(screen.queryByRole('heading', { name: 'Course Handouts' })).not.toBeInTheDocument();
     });
+
+    it('does not display title if handouts are empty markup', async () => {
+      setTabData({ handouts_html: '<ol>\n  <li> </li>\n</ol>' });
+      await fetchAndRender();
+      expect(screen.queryByRole('heading', { name: 'Course Handouts' })).not.toBeInTheDocument();
+    });
+
+    it('renders title if handouts are only an image', async () => {
+      setTabData({ handouts_html: '<p><img src="/static/syllabus.png" alt=""></p>' });
+      await fetchAndRender();
+      expect(screen.queryByRole('heading', { name: 'Course Handouts' })).toBeInTheDocument();
+    });
   });
 
   describe('Course Tools', () => {

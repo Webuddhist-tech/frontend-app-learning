@@ -23,7 +23,10 @@ const SidebarProvider = ({
   const shouldDisplayFullScreen = useWindowSize().width < breakpoints.extraLarge.minWidth;
   const shouldDisplaySidebarOpen = useWindowSize().width > breakpoints.extraLarge.minWidth;
   const query = new URLSearchParams(window.location.search);
-  const isInitiallySidebarOpen = shouldDisplaySidebarOpen || query.get('sidebar') === 'true';
+  // The discussions/notifications panel opens only when the learner asks for
+  // it (its trigger, or a ?sidebar=true link), not on its own on wide
+  // screens; the course outline tray takes that space by default.
+  const isInitiallySidebarOpen = query.get('sidebar') === 'true';
 
   let initialSidebar = shouldDisplayFullScreen ? getLocalStorage(`sidebar.${courseId}`) : null;
   if (!shouldDisplayFullScreen && isInitiallySidebarOpen) {

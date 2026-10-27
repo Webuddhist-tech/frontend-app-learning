@@ -44,7 +44,7 @@ const DatesTab = () => {
 
   return (
     <>
-      <div role="heading" aria-level="1" className="h2 my-3">
+      <div role="heading" aria-level="1" className="h2 my-3 dates-tab-title">
         {intl.formatMessage(messages.title)}
       </div>
       {isSelfPaced && hasDeadlines && (

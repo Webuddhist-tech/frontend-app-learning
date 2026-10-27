@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { getLocale, isRtl, useIntl } from '@edx/frontend-platform/i18n';
 import { DataTable } from '@openedx/paragon';
-import { Lock } from '@openedx/paragon/icons';
+import { Lock } from '@src/generic/WbaIcons';
 import { useContextId } from '../../../../data/hooks';
 import { useModel } from '../../../../generic/model-store';
 

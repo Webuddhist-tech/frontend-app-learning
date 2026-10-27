@@ -29,8 +29,12 @@ const LmsHtmlFragment = ({
 
   const iframe = useRef(null);
   function resetIframeHeight() {
-    if (iframe?.current?.contentWindow?.document?.body) {
-      iframe.current.height = iframe.current.contentWindow.document.body.parentNode.scrollHeight;
+    const doc = iframe?.current?.contentWindow?.document;
+    if (doc?.body) {
+      // Use the height of <html>'s box, not its scrollHeight: scrollHeight is
+      // never less than the frame itself, so a short fragment kept the
+      // iframe's default 150px height.
+      iframe.current.height = Math.ceil(doc.documentElement.getBoundingClientRect().height);
     }
   }
 

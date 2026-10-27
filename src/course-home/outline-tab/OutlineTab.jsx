@@ -45,15 +45,20 @@ const renderCourseTitle = (text) => {
       parts.push(text.substring(lastIndex, match.index));
     }
     parts.push(
-      <span key={match.index} style={{ fontFamily: 'Jomolhari, serif', fontSize: '1.2em' }}>
+      <span key={match.index} className="course-title-tibetan">
         {match[0]}
       </span>,
     );
     lastIndex = match.index + match[0].length;
   }
 
+  // The English that follows the Tibetan name gets a class so the brand can
+  // set it as a subtitle; English elsewhere in the title stays plain text.
   if (lastIndex < text.length) {
-    parts.push(text.substring(lastIndex));
+    const rest = text.substring(lastIndex);
+    parts.push(lastIndex > 0 && rest.trim()
+      ? <span key="subtitle" className="course-title-subtitle">{rest}</span>
+      : rest);
   }
 
   return parts.length > 0 ? parts : text;
@@ -151,7 +156,7 @@ const OutlineTab = () => {
     <>
       <div data-learner-type={learnerType} className="row w-100 mx-0 my-3 justify-content-between">
         <div className="col-12 col-sm-auto p-0">
-          <div role="heading" aria-level="1" className="h2">{renderCourseTitle(title)}</div>
+          <div role="heading" aria-level="1" className="h2 course-home-title">{renderCourseTitle(title)}</div>
         </div>
       </div>
       <div className="row course-outline-tab">

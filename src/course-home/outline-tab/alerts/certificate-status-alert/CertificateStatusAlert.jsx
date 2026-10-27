@@ -163,7 +163,7 @@ const CertificateStatusAlert = ({ payload }) => {
         buttonLink,
         buttonMessage,
       }) => (
-        <Alert variant={variant}>
+        <Alert variant={variant} className="certificate-status-alert">
           <div className="d-flex flex-column flex-lg-row justify-content-between align-items-center">
             <div className={buttonVisible ? 'col-lg-8' : 'col-auto'}>
               <FontAwesomeIcon icon={icon} className={iconClassName} />
